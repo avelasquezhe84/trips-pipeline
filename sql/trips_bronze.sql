@@ -3,6 +3,7 @@ select
 	region,
 	st_geogfromtext(origin_coord) as origin,
 	st_clusterkmeans(st_geomfromtext(origin_coord), 100) over() as origin_cluster,
+	st_geogfromtext(destination_coord) as destination,
 	st_clusterkmeans(st_geomfromtext(destination_coord), 100) over() as destination_cluster,
 	to_timestamp(datetime, 'YYYY-MM-DD HH24:MI:SS') as datetime,
 	datasource
