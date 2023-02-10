@@ -3,10 +3,10 @@ select
 from (
     select 
         region,
-        date_trunc('week', datetime) as trip_week,
+        date_trunc('week', trip_hour) as trip_week,
         count(1) as trip_count
     from trips_silver
-    where region = {region}
+    where region = '{region}'
     group by region, trip_week
 ) t
 group by region
