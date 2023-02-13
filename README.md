@@ -73,7 +73,7 @@ Trips API is a public RESTful API that enables to load data from vehicle trips a
 ```
 
 ### Area Weekly Average Request
-`GET http://localhost:5000/api/trips`
+`POST http://localhost:5000/api/trips`
 
 ### Request Body
 ```json
