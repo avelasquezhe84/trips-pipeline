@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./
+    command: python manage.py run -h 0.0.0.0
+    volumes:
+      - ./services/web/:/usr/src/app/
+      - ./sql/:/usr/src/app/sql/
+    environment:
+      - DATABASE_URL=postgresql+psycopg2://postgres:password@db:5432/tripsdb
+    ports:
+      - 5000:5000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - celery
+
+  celery:
+    build: ./
+    command: celery -A project.celery_app worker --loglevel=info
+    volumes:
+      - ./services/web/:/usr/src/app/
+      - ./sql/:/usr/src/app/sql/
+    depends_on:
+      - redis
+
+  db:
+    image: postgis/postgis
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=tripsdb
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379 
+
+
+volumes:
+  postgres_data:
